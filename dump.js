@@ -119,6 +119,7 @@
             }
         }
 
+        // TODO: Get rid of this. Just for testing.
         log("navigator");
         dump(navigator, "  ");
     }

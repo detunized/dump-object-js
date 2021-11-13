@@ -25,9 +25,13 @@
             dumpObject(o, indent, []);
         }
 
-        function dumpObject(o, indent, seen) {
+        function dumpNamed(o, name) {
+            log(name)
+            dump(o, "  ");
+        }
 
-            if (indent.length > 6)
+        function dumpObject(o, indent, seen) {
+            if (indent.length > 10)
                 return;
 
             let keys = [];
@@ -43,9 +47,17 @@
                 let padding = usePadding ? " ".repeat(maxKeyLength - k.length) : "";
                 let v = safeProperty(o, k);
                 let primitive = isPrimitive(v);
-                let fv = primitive ? formatPrimitiveValue(v) : getOpeningBrace(v);
+                let cycle = !primitive && seen.indexOf(v) >= 0;
+                let fv = "";
+                if (primitive) {
+                    fv = formatPrimitiveValue(v);
+                } else if (cycle) {
+                    fv = "[cycle]";
+                } else {
+                    fv = getOpeningBrace(v);
+                }
                 log(`${indent}${k}${padding} = ${fv}`);
-                if (!primitive) {
+                if (!primitive && !cycle) {
                     seen.push(v);
                     dumpObject(v, indent + "  ", seen);
                     seen.pop(v);
@@ -124,8 +136,7 @@
         }
 
         // TODO: Get rid of this. Just for testing.
-        log("window");
-        dump(window, "  ");
+        dumpNamed(navigator, "navigator");
     }
 
     try {

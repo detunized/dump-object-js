@@ -14,18 +14,20 @@
     }
 
     function main() {
+        const usePadding = false;
+        const squashNewlines = true;
+
         function dump(o, indent) {
             if (typeof indent === "undefined") {
                 indent = "";
             }
 
-            dumpObject(o, indent);
+            dumpObject(o, indent, []);
         }
 
-        function dumpObject(o, indent) {
-            const usePadding = false;
+        function dumpObject(o, indent, seen) {
 
-            if (indent.length > 10)
+            if (indent.length > 6)
                 return;
 
             let keys = [];
@@ -44,7 +46,9 @@
                 let fv = primitive ? formatPrimitiveValue(v) : getOpeningBrace(v);
                 log(`${indent}${k}${padding} = ${fv}`);
                 if (!primitive) {
-                    dumpObject(v, indent + "  ");
+                    seen.push(v);
+                    dumpObject(v, indent + "  ", seen);
+                    seen.pop(v);
                     log(indent + getClosingBrace(v));
                 }
             }
@@ -65,7 +69,7 @@
             }
 
             if (typeof v === "string") {
-                return v;
+                return squashNewlines ? v.replaceAll("\n", " ") : v;
             }
 
             if (typeof v === "number" || typeof v === "function") {
@@ -120,8 +124,8 @@
         }
 
         // TODO: Get rid of this. Just for testing.
-        log("navigator");
-        dump(navigator, "  ");
+        log("window");
+        dump(window, "  ");
     }
 
     try {

@@ -1,6 +1,9 @@
 // Copyright (C) Dmitry Yakimenko (detunized@gmail.com).
 // Licensed under the terms of the MIT license. See LICENCE for details.
 
+// TODO: This is a work in progress thing. It needs a bit of work before
+//       it could be used by anyone but myself.
+
 (function () {
     function log(o) {
         if (typeof sendToHost === "function") {
@@ -56,7 +59,7 @@
             if (v === null) {
                 return "null";
             }
-            
+
             if (typeof v === "undefined") {
                 return "undefined";
             }
@@ -84,7 +87,7 @@
             if (v === null) {
                 return "null";
             }
-            
+
             if (typeof v === "undefined") {
                 return "undefined";
             }
